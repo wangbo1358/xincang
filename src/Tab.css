@@ -1,0 +1,12 @@
+.content{
+    display: none;
+    height: 400px;
+    width: 400px;
+    background-color: skyblue;
+}
+.active{
+    display: block;
+}
+.content.active{
+    display: block;
+}
