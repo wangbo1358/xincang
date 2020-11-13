@@ -8,6 +8,7 @@ import "antd/dist/antd.css";
 import zhCN from 'antd/lib/locale/zh_CN';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
+import { AudioOutlined } from '@ant-design/icons';
 import { UserOutlined } from '@ant-design/icons';
 import { MessageOutlined, LikeOutlined, StarOutlined } from '@ant-design/icons';
 const { Meta } = Card;
@@ -28,6 +29,9 @@ const data = [
     title: 'Ant Design Title 4',
   },
 ];
+
+
+const { Search } = Input;
 
 const { Option } = Select;
 
@@ -107,6 +111,7 @@ class Info extends React.Component {
     console.log(this.state.propdata)
     return (
       <div>
+        <Link to='/'><Button type="primary">返回</Button></Link>
     <Card
       style={{ marginTop: 16 }}
       type="inner"
@@ -309,6 +314,7 @@ class Content1 extends React.Component {
       itemListtotal:1,
       cartitle_top_img1:"cartitle_top_img block",
       cartitle_top_img2:"cartitle_top_img hidden",
+      itemListkeyword:""
     }
 
   }
@@ -324,7 +330,7 @@ class Content1 extends React.Component {
       window.window.uyun.api.getDesigns({limit:_this.state.itemListlimit,page:_this.state.itemListpage}, (err, result) => {
         /* console.log(err) */
         console.log(result.data)
-        console.log(result1);
+        // console.log(result1);
         // console.log(result.data.length)
         console.log(_this.state.itemListlimit)
         _this.setState({
@@ -339,6 +345,8 @@ class Content1 extends React.Component {
         //   itemList: result.data
         // })
       })
+      // uyun.api.searchPrivateDesigns({keyword:'555'})
+      
       window.window.uyun.util.setToken(result1.token);
 
       // this.state.itemList
@@ -360,15 +368,15 @@ class Content1 extends React.Component {
   pagecont=(pageNumber)=>{
     this.setState({
       itemListpage:pageNumber
-    })
-
+    },()=>{
+      console.log(this.state.itemListpage);
     console.log(pageNumber);
     let _this = this
     window.window.uyun.env = 'prod';
     window.window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
       window.window.uyun.api.getDesigns({limit:_this.state.itemListlimit,page:_this.state.itemListpage}, (err, result) => {
         /* console.log(err) */
-        console.log(result.data)
+        console.log(result.data);
         console.log(result1);
         // console.log(result.data.length)
         console.log(_this.state.itemListlimit)
@@ -385,6 +393,8 @@ class Content1 extends React.Component {
         // })
       })
       window.window.uyun.util.setToken(result1.token);
+    })
+    
     });
 
 
@@ -433,6 +443,53 @@ onMouseOut=(item)=>{
     
   })
 }
+
+
+suffix = (
+  <AudioOutlined
+    style={{
+      fontSize: 16,
+      color: '#1890ff',
+    }}
+  />
+);
+
+
+onSearch = (value) => {
+  console.log(value);
+  this.setState({
+    itemListkeyword:value
+  },()=>{
+    console.log(this.state.itemListkeyword);
+    let _this = this
+    window.window.uyun.env = 'prod';
+    window.window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
+     
+      // uyun.api.searchPrivateDesigns({keyword:'555'})
+      window.window.uyun.api.searchPrivateDesigns({keyword:_this.state.itemListkeyword},(err, result2)=>{
+        console.log(result2);
+        _this.setState({
+          itemList: result2 && result2.data,
+          itemList1: result1,
+          itemListpage: result2.page,
+          // itemListlimit: result.limit,
+          itemListtotal: result2.total,
+          itemListkeyword:result2.keyword
+        })
+      })
+      window.window.uyun.util.setToken(result1.token);
+
+    });
+  })
+
+  
+
+  
+
+  
+}
+
+
   render() {
     console.log(this.props)
     return (
@@ -442,8 +499,18 @@ onMouseOut=(item)=>{
           <Radio value={1}>卡片视图</Radio>
           <Radio value={2}>列表视图</Radio>
         </Radio.Group>
+        
       </div>
-
+      <div className="search_top">
+      <Search
+          className="searcha"
+          placeholder="请输入搜索内容"
+          allowClear
+          enterButton="搜索"
+          size="large"
+          onSearch={this.onSearch}
+        />
+      </div>
       <Tabs className="tabnav" defaultActiveKey="1" onChange={(key)=>{this.datacont(key)}}>
       {/* <Tabs className="tabnav" defaultActiveKey="1" onChange={()=>{this.datacont()}}> */}
         {
@@ -504,11 +571,8 @@ onMouseOut=(item)=>{
 
 
 
-              
-
-              
-               
-              return <Col span={8} xs={24} sm={24} md={12} lg={8} xl={6}  key={index}>
+              return <Col span={8} xs={24} sm={24} md={12} lg={8} xxl={6}  key={index}>
+                <li>
               <Card className="cardone">
                 <div className="cartitle_top">
                   <a target="_blank" onMouseOver={()=>{this.onMouseOver(item)}} onMouseOut={() => {this.onMouseOut(item)}} href={'https://bim.zhuxingyun.com/tool/cad?id=' + item.id + '&tid=' + item.tid} className="cadtit">CAD</a>
@@ -540,6 +604,7 @@ onMouseOut=(item)=>{
                 </div>
 
               </Card>
+              </li>
             </Col>
             
 
@@ -549,12 +614,13 @@ onMouseOut=(item)=>{
               }
 
               if (this.state.selectdata === item.properties.style) {
-                return <Col span={8} xs={24} sm={24} md={12} lg={8} xl={6} key={index}>
+                return <Col span={8} xs={24} sm={24} md={12} lg={8} xxl={6} key={index}>
+                <li>
                 <Card className="cardone">
                   <div className="cartitle_top">
-                    <a target="_blank" href={'https://bim.zhuxingyun.com/tool/cad?id=' + item.id + '&tid=' + item.tid} className="cadtit">CAD</a>
+                    <a target="_blank" onMouseOver={()=>{this.onMouseOver(item)}} onMouseOut={() => {this.onMouseOut(item)}} href={'https://bim.zhuxingyun.com/tool/cad?id=' + item.id + '&tid=' + item.tid} className="cadtit">CAD</a>
                     <Link to={{pathname:"/info",state:item}}>
-                  <img className="cartitle_top_img" src={item.previewurl} />
+                    <img className={this.state.cartitle_top_img1} src={ item.a ? item.drawingpreviewurl : item.previewurl } />
                   <div className="cartitle">
                   
                     <Avatar className="avarar1" src={this.state.itemList1.headimgurl} />{this.state.itemList1.displayname}&nbsp;设计
@@ -577,6 +643,7 @@ onMouseOut=(item)=>{
                   </div>
   
                 </Card>
+                </li>
               </Col>
               } else {
                 return null;
@@ -586,8 +653,9 @@ onMouseOut=(item)=>{
           })
         }
       {/* </ul> */}
-      <Col span={8} xs={24} sm={24} md={12} lg={8} xl={6}></Col>
-      <Col span={8} xs={24} sm={24} md={12} lg={8} xl={6} ></Col>
+      <Col span={8} xs={24} sm={24} md={12} lg={8} xxl={6}><li></li></Col>
+      <Col span={8} xs={24} sm={24} md={12} lg={8} xxl={6}><li></li></Col>
+      <Col span={8} xs={24} sm={24} md={12} lg={8} xxl={6}><li></li></Col>
       </Row>
 
         

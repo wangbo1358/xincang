@@ -503,11 +503,29 @@
 }
 
 
+.searcha{
+  width: 300px !important;
+  display: inline-block;
+  margin: auto;
+}
+.search_top{
+  padding: 5px 0px;
+  box-sizing: border-box;
+  text-align: center;
+}
+.tabnav{
+  width: 90%;
+  margin: 5px auto !important;
+}
 
-
-
-
-
+.rowmar li{
+  width: 300px;
+  margin: auto;
+}
+.list_content{
+  width: 90%;
+  margin: auto !important;
+}
 
 
 /* 适应 */

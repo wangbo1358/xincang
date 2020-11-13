@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import AppCopy from './App copy';
+import AppCopy from './App_content';
 /* import Childcom from './01index copy'; */
 import reportWebVitals from './reportWebVitals';
 import { Button, DatePicker, version ,message} from "antd";
