@@ -3,7 +3,7 @@ import './App_copy.css';
 import img2 from "./deleta.png";
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
-import { Button, DatePicker,Select, version, message, Avatar,Input, Image, Card, Tabs ,List, Space,Radio,Row,Col,Divider } from "antd";
+import { Button, DatePicker,Select, version, message,Pagination, Avatar,Input, Image, Card, Tabs ,List, Space,Radio,Row,Col,Divider } from "antd";
 import "antd/dist/antd.css";
 import zhCN from 'antd/lib/locale/zh_CN';
 import moment from 'moment';
@@ -165,9 +165,9 @@ class Info extends React.Component {
           分享状态
         </span>
         <Select defaultValue="lucy2" style={{ width:"79%" }} allowClear>
-          <Option value="">其他人可编辑</Option>
-          <Option value="">其他人可复制</Option>
-          <Option value="">其他人可读</Option>
+          <Option value="其他人可编辑">其他人可编辑</Option>
+          <Option value="其他人可复制">其他人可复制</Option>
+          <Option value="其他人可读">其他人可读</Option>
           <Option value="lucy2">私有</Option>
         </Select>
       </div>
@@ -299,9 +299,16 @@ class Content1 extends React.Component {
       titledata: ["所有", "现代", "田园", "欧式", "美式", "中式", "日式", "北欧", "地中海", "东南亚", "简欧", "工业风", "简美", "工装"],
       selectdata: "所有",
       value: 1,
-      tit1:"block",
-      tit2:"hidden",
-      imgurl:""
+      tit1:"contentb block",
+      tit2:"contentb hidden",
+      imgurl:"",
+      pagenum:1,
+      pagelength:0,
+      itemListpage: 1,
+      itemListlimit: 8,
+      itemListtotal:1,
+      cartitle_top_img1:"cartitle_top_img block",
+      cartitle_top_img2:"cartitle_top_img hidden",
     }
 
   }
@@ -314,19 +321,30 @@ class Content1 extends React.Component {
     let _this = this
     window.window.uyun.env = 'prod';
     window.window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
-      window.window.uyun.api.getDesigns({}, (err, result) => {
+      window.window.uyun.api.getDesigns({limit:_this.state.itemListlimit,page:_this.state.itemListpage}, (err, result) => {
         /* console.log(err) */
         console.log(result.data)
         console.log(result1);
+        // console.log(result.data.length)
+        console.log(_this.state.itemListlimit)
         _this.setState({
           itemList: result && result.data,
-          itemList1: result1
+          itemList1: result1,
+          itemListpage: result.page,
+          // itemListlimit: result.limit,
+          itemListtotal: result.total
+          
         })
         // this.setState({
         //   itemList: result.data
         // })
       })
       window.window.uyun.util.setToken(result1.token);
+
+      // this.state.itemList
+      // this.selectdata({
+      //   pagelength:this.itemList.length
+      // })
     });
   }
 
@@ -339,6 +357,39 @@ class Content1 extends React.Component {
     })
   } */
 
+  pagecont=(pageNumber)=>{
+    this.setState({
+      itemListpage:pageNumber
+    })
+
+    console.log(pageNumber);
+    let _this = this
+    window.window.uyun.env = 'prod';
+    window.window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
+      window.window.uyun.api.getDesigns({limit:_this.state.itemListlimit,page:_this.state.itemListpage}, (err, result) => {
+        /* console.log(err) */
+        console.log(result.data)
+        console.log(result1);
+        // console.log(result.data.length)
+        console.log(_this.state.itemListlimit)
+        _this.setState({
+          itemList: result && result.data,
+          itemList1: result1,
+          itemListpage: result.page,
+          // itemListlimit: result.limit,
+          itemListtotal: result.total
+          
+        })
+        // this.setState({
+        //   itemList: result.data
+        // })
+      })
+      window.window.uyun.util.setToken(result1.token);
+    });
+
+
+    
+  }
   datacont = (key) => {
     this.setState({
       selectdata:this.state.titledata[key-1]
@@ -352,25 +403,34 @@ class Content1 extends React.Component {
 console.log(this.state.value)
     if(this.state.value==2){
         this.setState({
-          tit1:"block",
-          tit2:"hidden"
+          tit1:"contentb block",
+          tit2:"contentb hidden"
         })
     }else{
         this.setState({
-          tit1:"hidden",
-          tit2:"block"
+          tit1:"contentb hidden",
+          tit2:"contentb block"
         })
     }
   };
 
-onMouseOver=(mouta)=>{
+onMouseOver=(item)=>{
+  // if(item){
+
+  // }
+  item.a=true;
+  // this.forceUpdate();强制更新
   this.setState({
-    imgurl:mouta
+
   })
+
 }
-onMouseLeave=(moutb)=>{
+onMouseOut=(item)=>{
+  item.a=false;
+  // debugger
+  // this.forceUpdate();
   this.setState({
-    imgurl:moutb
+    
   })
 }
   render() {
@@ -396,7 +456,15 @@ onMouseLeave=(moutb)=>{
             
       <div className={this.state.tit1}>
       {/* 水平，垂直 */}
-      <Row className="rowmar"  justify="center" gutter={[{ xs: 8, sm: 16, md: 24, lg: 32 }, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
+      <Row wrap={true} className="rowmar"  
+      justify="center" 
+      gutter={[
+      // { xs: 8, sm: 16, md: 24, lg: 32 }, 
+      // { xs: 8, sm: 16, md: 24, lg: 32 }
+      16,16
+      ]}
+      >
+      {/* <Row className="rowmar"  justify="space-around" > */}
       {/* <ul className="car_ul"> */}
         {
           this.state.itemList.map((item, index) => {
@@ -440,12 +508,16 @@ onMouseLeave=(moutb)=>{
 
               
                
-              return <Col key={index}>
+              return <Col span={8} xs={24} sm={24} md={12} lg={8} xl={6}  key={index}>
               <Card className="cardone">
                 <div className="cartitle_top">
-                  <a target="_blank" onMouseOver={()=>{this.onMouseOver(item.drawingpreviewurl)}} onMouseOut={()=>{this.onMouseOver(item.previewurl)}} href={'https://bim.zhuxingyun.com/tool/cad?id=' + item.id + '&tid=' + item.tid} className="cadtit">CAD</a>
+                  <a target="_blank" onMouseOver={()=>{this.onMouseOver(item)}} onMouseOut={() => {this.onMouseOut(item)}} href={'https://bim.zhuxingyun.com/tool/cad?id=' + item.id + '&tid=' + item.tid} className="cadtit">CAD</a>
                   <Link to={{pathname:"/info",state:item}}>
-                  <img className="cartitle_top_img" src={item.previewurl} />
+                    {/* {
+                      item.a ? <img className={this.state.cartitle_top_img1} src={item.drawingpreviewurl} /> : <img className={this.state.cartitle_top_img1} src={item.previewurl} /> 
+                    } */}
+                  <img className={this.state.cartitle_top_img1} src={ item.a ? item.drawingpreviewurl : item.previewurl } />
+                  
                   <div className="cartitle">
                   
                     <Avatar className="avarar1" src={this.state.itemList1.headimgurl} />{this.state.itemList1.displayname}&nbsp;设计
@@ -477,7 +549,7 @@ onMouseLeave=(moutb)=>{
               }
 
               if (this.state.selectdata === item.properties.style) {
-                return <Col key={index}>
+                return <Col span={8} xs={24} sm={24} md={12} lg={8} xl={6} key={index}>
                 <Card className="cardone">
                   <div className="cartitle_top">
                     <a target="_blank" href={'https://bim.zhuxingyun.com/tool/cad?id=' + item.id + '&tid=' + item.tid} className="cadtit">CAD</a>
@@ -514,7 +586,12 @@ onMouseLeave=(moutb)=>{
           })
         }
       {/* </ul> */}
+      <Col span={8} xs={24} sm={24} md={12} lg={8} xl={6}></Col>
+      <Col span={8} xs={24} sm={24} md={12} lg={8} xl={6} ></Col>
       </Row>
+
+        
+
       </div> 
       <div className={this.state.tit2}>
 
@@ -569,8 +646,12 @@ onMouseLeave=(moutb)=>{
         }}
       />
 
+      
 
       </div>
+      
+      {/* 分页 */}
+      <Pagination className="pagecont" defaultCurrent={1} total={this.state.itemListtotal} onChange={(pageNumber)=>{this.pagecont(pageNumber)}} />
       </div>
     )
   }

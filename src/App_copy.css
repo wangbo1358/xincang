@@ -401,7 +401,7 @@
 }
 
 .cardone{
-  width: 334px;
+  /* width: 334px; */
 }
 .sjlist{
   line-height: 50px;
@@ -484,6 +484,33 @@
   box-sizing: border-box;
 }
 
+.contentb{
+  width: 90%;
+  margin: auto;
+}
+.contentb .ant-row .ant-col:nth-last-child(1){
+  height: 0px;
+  height: 0px;
+  padding: 0px !important;
+}
+.contentb .ant-row .ant-col:nth-last-child(2){
+  height: 0px;
+  height: 0px;
+  padding: 0px !important;
+}
+.pagecont{
+  text-align: center;
+}
+
+
+
+
+
+
+
+
+
+/* 适应 */
 @media screen and (max-width: 768px) {
   
   .sjlist .sjlname {
