@@ -26,7 +26,7 @@ class App_content extends React.Component {
     this.state = {
       itemList: [],
       itemList1: [],
-      titledata: ["所有", "现代", "田园", "欧式", "美式", "中式", "日式", "北欧", "地中海", "东南亚", "简欧", "工业风", "简美", "工装"],
+      // titledata: ["所有", "现代", "田园", "欧式", "美式", "中式", "日式", "北欧", "地中海", "东南亚", "简欧", "工业风", "简美", "工装"],
       selectdata: "所有"
     }
 
