@@ -84,6 +84,9 @@ class App_content extends React.Component {
               <Route path="/info" component={Info}></Route>
             </Switch>
           </div>
+          <div className="app_bottom">
+              <a href="https://zhuxingyun.com/">上海筑星云计算技术有限公司</a><span>版权所有 © 2017-2020</span>
+          </div>
         </div>
 
       </Router>
