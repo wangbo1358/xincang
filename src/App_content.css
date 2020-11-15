@@ -499,6 +499,11 @@
   height: 0px;
   padding: 0px !important;
 }
+.contentb .ant-row .ant-col:nth-last-child(3){
+  height: 0px;
+  height: 0px;
+  padding: 0px !important;
+}
 .pagecont{
   text-align: center;
 }
