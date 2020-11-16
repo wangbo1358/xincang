@@ -525,7 +525,7 @@
 }
 
 .rowmar li{
-  width: 300px;
+  width: 320px;
   margin: auto;
 }
 .list_content{
@@ -562,6 +562,24 @@
 .app_bottom span{
   margin-left: 10px;
 }
+
+.example {
+  position: fixed;
+  top:0px;
+  left:0px;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  z-index: 9999;
+  line-height: 100vh;
+}
+.spin{
+  vertical-align: middle;
+}
+
 /* 适应 */
 @media screen and (max-width: 768px) {
   
@@ -592,5 +610,56 @@
 }
 .sjk{
   margin-left: 10px;
+}
+
+.App-header{
+  position: fixed;
+  top:50px;
+  left: 0px;
+  width: 100%;
+  margin-top: 0px;
+  z-index: 99;
+  background-color: #fff;
+}
+.content{
+  /* position: relative; */
+  margin-top: 300px;
+
+}
+.radio_chang{
+  position: fixed;
+  top:140px;
+  left: 0px;
+  width: 100%;
+  background-color: #fff;
+  z-index: 99;
+  padding-bottom: 25px;
+}
+.search_top{
+  position: fixed;
+  top:185px;
+  left: 0px;
+  width: 100%;
+  z-index: 99;
+  padding-bottom: 25px;
+  background-color: #fff;
+}
+.tabnav{
+  position: fixed;
+  top:235px;
+  left: 0px;
+  right: 0;
+  width: 90%;
+  z-index: 99;
+  background-color: #fff;
+}
+.rowmar {
+  margin: -8px -8px 8px !important;
+  /* padding: 0px 0px;
+  box-sizing: border-box; */
+}
+.pagecont {
+  display: none;
+  padding-top: 20px !important;
 }
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import AppCopy from './App_content';
+import AppContent from './App_content';
 /* import Childcom from './01index copy'; */
 import reportWebVitals from './reportWebVitals';
 import { Button, DatePicker, version ,message} from "antd";
@@ -53,7 +53,7 @@ class Helloworld extends React.Component {
 ReactDOM.render(
   /* <React.StrictMode> */
   // <App />,
-  <AppCopy />,
+  <AppContent />,
 /*   <DatePicker />, */
   /* <HelloMessage weather="出太阳" />, */
   /* <Childcom/> */

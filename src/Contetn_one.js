@@ -3,8 +3,11 @@ import './App_content.css';
 import img2 from "./deleta.png";
 import ReactDOM, { render } from 'react-dom';
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
-import { Button, DatePicker, Select, version, message, Pagination, Avatar, Input, Image, Card, Tabs, List, Space, Radio, Row, Col, Divider } from "antd";
+import { Button, DatePicker, Select,Spin, version, message, Pagination, Avatar, Input, Image, Card, Tabs, List, Space, Radio, Row, Col, Divider } from "antd";
 import "antd/dist/antd.css";
+/* import Scrollload from 'Scrollload'
+const Scrollload = require('Scrollload').default */
+import LazyLoad from 'react-lazyload';
 import zhCN from 'antd/lib/locale/zh_CN';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
@@ -41,18 +44,82 @@ class Content1 extends React.Component {
       itemListtotal: 1,
       cartitle_top_img1: "cartitle_top_img block",
       cartitle_top_img2: "cartitle_top_img hidden",
-      itemListkeyword: ""
+      itemListkeyword: "",
+      scrollHeight: 0,
+      hasMore: true  // 判断接口是否还有数据，通过接口设置
     }
 
   }
+//   componentDidMount(){
+//     this.setState({
+//         scrollHeight: window.innerHeight - 320
+//     })
+// }
+//组件渲染完毕，添加动画
+componentDidMount() {
+//   if (this.scroll) {
+//    this.scroll.addEventListener("scroll", e => {
+//      const { clientHeight, scrollHeight, scrollTop } = e.target;
 
+//      const isBottom = scrollTop + clientHeight + 20 > scrollHeight;
+//      console.log(scrollTop, clientHeight, scrollHeight, isBottom);
+//    });
+//  }
+window.addEventListener('scroll', this.handleScroll);
+}
+//组件将要渲染，ajax，添加动画前的类
+componentWillUnmount(){
+ window.removeEventListener('scroll', this.handleScroll);
+}
+// 处理滚动监听
+handleScroll=()=>{
+  console.log(this.state.itemListlimit)
+  let scrollTop = document.documentElement.scrollTop||document.body.scrollTop;
+    //变量windowHeight是可视区的高度
+    let windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+    //变量scrollHeight是滚动条的总高度（当前可滚动的页面的总高度）
+    let scrollHeight = document.documentElement.scrollHeight||document.body.scrollHeight;
+    //滚动条到底部
+	if(scrollTop+windowHeight>=scrollHeight){
+    //要进行的操作
+     //this.fetchData()
+	}
+}
+fetchData=()=>{
+  // 接口调用数据字段
+  //传入的参数包括但不限于：pageIndex， pageSize。。。
+  // 获取后更新的数据包括但不限于：dataList，hasMore。。。
+  console.log(this.state.itemListlimit)
+  this.setState({
+    itemListlimit:this.state.itemListlimit+3
+  },()=>{
+    let _this = this
+    console.log(_this.state.itemListlimit)
+    
+    window.window.uyun.api.getDesigns({ limit: _this.state.itemListlimit }, (err, result) => {  
+      console.log(result.data)
+        console.log(_this.state.itemListlimit)
+        _this.setState({
+          itemList: result && result.data,
+          itemListpage: result.page,
+          itemListtotal: result.total
+
+        })
+      })
+  })
+}
   componentWillMount = () => {
     let _this = this
     window.window.uyun.env = 'prod';
     window.window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
-      window.window.uyun.api.getDesigns({ limit: _this.state.itemListlimit, page: _this.state.itemListpage }, (err, result) => {
-        console.log(result.data)
+      // window.window.uyun.api.getDesigns({ limit: _this.state.itemListlimit, page: _this.state.itemListpage }, (err, result) => {
+        window.window.uyun.api.getDesigns({ limit: _this.state.itemListlimit }, (err, result) => {  
+      console.log(result.data)
         console.log(_this.state.itemListlimit)
+        if(result.data.length>0){
+            console.log(result.data.length);
+            document.getElementById("example").style.display="none"
+        }
         _this.setState({
           itemList: result && result.data,
           itemList1: result1,
@@ -79,15 +146,14 @@ class Content1 extends React.Component {
           console.log(result.data);
           console.log(result1);
           // console.log(result.data.length)
-          console.log(_this.state.itemListlimit)
           _this.setState({
             itemList: result && result.data,
             itemList1: result1,
             itemListpage: result.page,
             // itemListlimit: result.limit,
             itemListtotal: result.total
-
           })
+
         })
         window.window.uyun.util.setToken(result1.token);
       })
@@ -104,7 +170,7 @@ class Content1 extends React.Component {
       value: e.target.value,
     });
     console.log(this.state.value)
-    if (this.state.value == 2) {
+    if (this.state.value === 2) {
       this.setState({
         tit1: "contentb block",
         tit2: "contentb hidden"
@@ -127,33 +193,50 @@ class Content1 extends React.Component {
   );
   onSearch = (value) => {
     console.log(value);
+
+
     this.setState({
       itemListkeyword: value
     }, () => {
       console.log(this.state.itemListkeyword);
       let _this = this
-      window.window.uyun.env = 'prod';
-      window.window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
         // uyun.api.searchPrivateDesigns({keyword:'555'})
-        window.window.uyun.api.searchPrivateDesigns({ keyword: _this.state.itemListkeyword }, (err, result2) => {
+        window.window.uyun.api.searchPrivateDesigns({ keyword: _this.state.itemListkeyword,limit: _this.state.itemListlimit, page: _this.state.itemListpage }, (err, result2) => {
           console.log(result2);
+          if(result2==null){
+            window.window.uyun.api.getDesigns({ limit: _this.state.itemListlimit }, (err, result) => {
+                console.log(result.data);
+                /* console.log(result1); */
+                // console.log(result.data.length)
+                _this.setState({
+                  itemList: result && result.data,
+                  itemListpage: result.page,
+                  // itemListlimit: result.limit,
+                  itemListtotal: result.total
+                })
+      
+              })
+          }else{
           _this.setState({
             itemList: result2 && result2.data,
-            itemList1: result1,
             itemListpage: result2.page,
             // itemListlimit: result.limit,
             itemListtotal: result2.total,
             itemListkeyword: result2.keyword
           })
+        }
+
         })
-        window.window.uyun.util.setToken(result1.token);
       });
-    })
+
   }
 
 
 
+  
+
   render() {
+    // const {scrollHeight} = this.state;
     // console.log(this.props)
     return (
       <div className="content1">
@@ -180,9 +263,12 @@ class Content1 extends React.Component {
             })
           }
         </Tabs>
-
-        <div className={this.state.tit1}>
+        {/* onScroll={this.handleScroll} */}
+        <div className={this.state.tit1} >
           {/* 水平，垂直 */}
+          <div className="example" id="example">
+              <Spin size="large" className="spin" />
+            </div>
           <Row
             wrap={true}
             className="rowmar"
@@ -193,16 +279,17 @@ class Content1 extends React.Component {
               16, 16
             ]}
           >
+            
             {
               this.state.itemList.map((item, index) => {
                 console.log(this.state.selectdata)
-                if (this.state.selectdata == "所有") {
+                if (this.state.selectdata === "所有") {
                   // return ListCont(item,index);
-                  return <ListCont key={index} dispname={this.state.itemList1.displayname} headurl={this.state.itemList1.headimgurl} listcon={item} listindex={index} ></ListCont>;
+                  return <ListCont ref={e => (this.scroll = e)} className='scroll-body' key={index} dispname={this.state.itemList1.displayname} headurl={this.state.itemList1.headimgurl} listcon={item} listindex={index} ></ListCont>;
                 }
                 if (this.state.selectdata === item.properties.style) {
                   // return ListCont(item,index);
-                  return <ListCont key={index} dispname={this.state.itemList1.displayname} headurl={this.state.itemList1.headimgurl} listcon={item} listindex={index} ></ListCont>;
+                  return <ListCont onScroll={this.handleScroll} ref={e => (this.scroll = e)} className='scroll-body' key={index} dispname={this.state.itemList1.displayname} headurl={this.state.itemList1.headimgurl} listcon={item} listindex={index} ></ListCont>;
                 } else {
                   return null;
                 }
@@ -218,7 +305,7 @@ class Content1 extends React.Component {
             itemLayout="horizontal"
             dataSource={this.state.itemList}
             renderItem={item => {
-              if (this.state.selectdata == "所有") {
+              if (this.state.selectdata === "所有") {
                 // return ListCont2(item)
                 return <ListCont2 imgurl={this.state.itemList1.headimgurl} listcon={item}></ListCont2>;
               }
