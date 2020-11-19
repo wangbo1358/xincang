@@ -21,9 +21,20 @@ const { TabPane } = Tabs;
 class ListCont extends React.Component{
     constructor(props) {
       super(props)
+      this.state={
+        lisc:this.props.listcon,
+        lisin:this.props.listindex
+      }
       
   
     }
+
+    // componentWillReceiveProps=()=>{
+    //   this.setState({
+    //     lisc:this.props.listcon,
+    //     lisin:this.props.listindex
+    //   })
+    // }
     onMouseOver = (item) => {
       item.a = true;
       // this.forceUpdate();强制更新
@@ -40,17 +51,27 @@ class ListCont extends React.Component{
       })
     }
     time = (date) => {
-      let json_date = new Date(date).toJSON();
-      return new Date(new Date(json_date) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+      // let json_date = new Date(date).toLocaleTimeString()
+      let json_date = new Date(date).toLocaleString()
+      // let jsda=json_date.dateFormat("YYYY-mm-dd HH:MM")
+        return json_date;
+      // return new Date(new Date(json_date) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    }
+    remove = (index) => {
+    console.log("删除第"+(index+1)+"个")
+      //this.setState({
+        //itemList:this.props.listcon.splice(index, 1)
+      //})
     }
      
     render(){
+      //console.log(this.state.lisc)
     return  <Col span={8} xs={24} sm={24} md={12} lg={8} xxl={6} key={this.props.listindex}>
           <li>
           <Card className="cardone">
               <div className="cartitle_top">
               <a target="_blank" onMouseOver={() => { this.onMouseOver(this.props.listcon) }} onMouseOut={() => { this.onMouseOut(this.props.listcon) }} href={'https://bim.zhuxingyun.com/tool/cad?id=' + this.props.listcon.id + '&tid=' + this.props.listcon.tid} className="cadtit">CAD</a>
-              <Link to={{ pathname: "/info", state: this.props.listcon }}>
+              <Link to={{ pathname: "/info/"+ this.props.dataid, state:{a:this.props.listcon,b:this.props.listindex}}}>
                   
                   <img className="cartitle_top_img block" src={this.props.listcon.a ? this.props.listcon.drawingpreviewurl : this.props.listcon.previewurl} />
   
@@ -69,7 +90,7 @@ class ListCont extends React.Component{
               </div>
               <div className="content_ul_con_bottom_bottom">
                   <a target="_blank" href={'https://bim.zhuxingyun.com/tool/design?id=' + this.props.listcon.id + '&tid=' + this.props.listcon.tid} className="openset" >打开设计</a>
-                  <img src={img2} className="img2" alt="img2" />
+                  <img onClick={()=>{this.remove(this.props.listindex)}} src={img2} className="img2" alt="img2" />
               </div>
               </div>
           </Card>

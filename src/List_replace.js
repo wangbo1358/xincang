@@ -34,14 +34,15 @@ class Login extends React.Component {
     }
     time = (date) => {
       console.log("ss")
-      let json_date = new Date(date).toJSON();
-      return new Date(new Date(json_date) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+      let json_date = new Date(date).toLocaleString();
+      return json_date;
+      // return new Date(new Date(json_date) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
     }
     componentWillMount = () => {
       let _this = this
-      window.window.uyun.env = 'prod';
-      window.window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
-        window.window.uyun.api.getDesigns({}, (err, result) => {
+      // window.window.uyun.env = 'prod';
+      window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
+        window.uyun.api.getDesigns({}, (err, result) => {
           console.log(result.data)
           console.log(result1);
           _this.setState({
@@ -49,7 +50,7 @@ class Login extends React.Component {
             itemList1: result1
           })
         })
-        window.window.uyun.util.setToken(result1.token);
+        // window.window.uyun.util.setToken(result1.token);
       });
     }
     datacont = (listc, index) => {

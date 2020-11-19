@@ -83,6 +83,7 @@ handleScroll=()=>{
 	if(scrollTop+windowHeight>=scrollHeight){
     //要进行的操作
      //this.fetchData()
+    //  this.props.history.push("/login")
 	}
 }
 fetchData=()=>{
@@ -96,7 +97,7 @@ fetchData=()=>{
     let _this = this
     console.log(_this.state.itemListlimit)
     
-    window.window.uyun.api.getDesigns({ limit: _this.state.itemListlimit }, (err, result) => {  
+    window.uyun.api.getDesigns({ limit: _this.state.itemListlimit }, (err, result) => {  
       console.log(result.data)
         console.log(_this.state.itemListlimit)
         _this.setState({
@@ -110,10 +111,11 @@ fetchData=()=>{
 }
   componentWillMount = () => {
     let _this = this
-    window.window.uyun.env = 'prod';
-    window.window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
+    // window.window.uyun.env = 'prod';
+    // debugger
+    window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
       // window.window.uyun.api.getDesigns({ limit: _this.state.itemListlimit, page: _this.state.itemListpage }, (err, result) => {
-        window.window.uyun.api.getDesigns({ limit: _this.state.itemListlimit }, (err, result) => {  
+      window.uyun.api.getDesigns({ limit: _this.state.itemListlimit }, (err, result) => {  
       console.log(result.data)
         console.log(_this.state.itemListlimit)
         if(result.data.length>0){
@@ -128,8 +130,10 @@ fetchData=()=>{
 
         })
       })
+      
       // uyun.api.searchPrivateDesigns({keyword:'555'})
-      window.window.uyun.util.setToken(result1.token);
+      // window.window.uyun.util.setToken(result1.token);
+      // window.window.uyun.util.setApiToken(result1.token);
     });
   }
 
@@ -140,23 +144,23 @@ fetchData=()=>{
       console.log(this.state.itemListpage);
       console.log(pageNumber);
       let _this = this
-      window.window.uyun.env = 'prod';
-      window.window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
-        window.window.uyun.api.getDesigns({ limit: _this.state.itemListlimit, page: _this.state.itemListpage }, (err, result) => {
+      // window.window.uyun.env = 'prod';
+      // window.window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
+        window.uyun.api.getDesigns({ limit: _this.state.itemListlimit, page: _this.state.itemListpage }, (err, result) => {
           console.log(result.data);
-          console.log(result1);
+          // console.log(result1);
           // console.log(result.data.length)
           _this.setState({
             itemList: result && result.data,
-            itemList1: result1,
+            // itemList1: result1,
             itemListpage: result.page,
             // itemListlimit: result.limit,
             itemListtotal: result.total
           })
 
         })
-        window.window.uyun.util.setToken(result1.token);
-      })
+        // window.window.uyun.util.setToken(result1.token);
+      // })
     });
   }
   datacont = (key) => {
@@ -166,10 +170,22 @@ fetchData=()=>{
   }
   onChange = e => {
     console.log('radio checked', e.target.value);
+    // document.cookie="";
+    // delCookie()
+    
     this.setState({
       value: e.target.value,
+    },()=>{
+      if(this.state.value === 3){
+        // let date = new Date();
+        // date.setTime(date.getTime() - 10000);
+        // document.cookie = "usepwd=a; expires=" + date.toGMTString();
+        window.uyun.util.setToken("");
+        this.props.history.push("/homelogin")
+      }
     });
     console.log(this.state.value)
+    
     if (this.state.value === 2) {
       this.setState({
         tit1: "contentb block",
@@ -201,16 +217,17 @@ fetchData=()=>{
       console.log(this.state.itemListkeyword);
       let _this = this
         // uyun.api.searchPrivateDesigns({keyword:'555'})
-        window.window.uyun.api.searchPrivateDesigns({ keyword: _this.state.itemListkeyword,limit: _this.state.itemListlimit, page: _this.state.itemListpage }, (err, result2) => {
+        window.uyun.api.searchPrivateDesigns({ keyword: _this.state.itemListkeyword,
+          limit: _this.state.itemListlimit, page: 1 , type: 'design'}, (err, result2) => {
           console.log(result2);
           if(result2==null){
-            window.window.uyun.api.getDesigns({ limit: _this.state.itemListlimit }, (err, result) => {
+            window.uyun.api.getDesigns({ limit: _this.state.itemListlimit }, (err, result) => {
                 console.log(result.data);
                 /* console.log(result1); */
                 // console.log(result.data.length)
                 _this.setState({
                   itemList: result && result.data,
-                  itemListpage: result.page,
+                  itemListpage: 1,
                   // itemListlimit: result.limit,
                   itemListtotal: result.total
                 })
@@ -219,7 +236,7 @@ fetchData=()=>{
           }else{
           _this.setState({
             itemList: result2 && result2.data,
-            itemListpage: result2.page,
+            itemListpage: 1,
             // itemListlimit: result.limit,
             itemListtotal: result2.total,
             itemListkeyword: result2.keyword
@@ -231,6 +248,24 @@ fetchData=()=>{
 
   }
 
+
+  // componentWillReceiveProps=()=>{
+  //   let _this = this
+  //   window.window.uyun.api.getDesigns({ limit: _this.state.itemListlimit }, (err, result) => {  
+  //     console.log(result.data)
+  //       console.log(_this.state.itemListlimit)
+  //       if(result.data.length>0){
+  //           console.log(result.data.length);
+  //           document.getElementById("example").style.display="none"
+  //       }
+  //       _this.setState({
+  //         itemList: result && result.data,
+  //         itemListpage: result.page,
+  //         itemListtotal: result.total
+
+  //       })
+  //     })
+  // }
 
 
   
@@ -244,6 +279,7 @@ fetchData=()=>{
           <Radio.Group onChange={this.onChange} value={this.state.value}>
             <Radio value={1}>卡片视图</Radio>
             <Radio value={2}>列表视图</Radio>
+            <Radio value={3}>退出登陆</Radio>
           </Radio.Group>
         </div>
         <div className="search_top">
@@ -285,7 +321,8 @@ fetchData=()=>{
                 console.log(this.state.selectdata)
                 if (this.state.selectdata === "所有") {
                   // return ListCont(item,index);
-                  return <ListCont ref={e => (this.scroll = e)} className='scroll-body' key={index} dispname={this.state.itemList1.displayname} headurl={this.state.itemList1.headimgurl} listcon={item} listindex={index} ></ListCont>;
+                  // console.log(item.id)
+                  return <ListCont dataid={item.id} datauid={item.uid} className='scroll-body' key={index} dispname={this.state.itemList1.displayname} headurl={this.state.itemList1.headimgurl} listcon={item} listindex={index} ></ListCont>;
                 }
                 if (this.state.selectdata === item.properties.style) {
                   // return ListCont(item,index);

@@ -579,6 +579,67 @@
 .spin{
   vertical-align: middle;
 }
+.login_content{
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999999;
+}
+.login_content_card {
+  width: 650px;
+  height: 450px;
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto !important;
+  padding: 20px!important;
+  box-sizing: border-box!important;
+}
+.username{
+  width: 70% !important;
+  display: block;
+  margin: auto;
+  margin-top: 50px;
+  margin-left: 5px;
+}
+.password{
+  width: 70% !important;
+  margin: auto;
+  margin-top: 50px;
+  margin-left: 5px;
+}
+
+.login_btn{
+  display: block !important;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.login_title{
+  font-size: 28px;
+  text-align: center;
+  margin-top: 30px;
+  display: block;
+}
+
+.error_content {
+  text-align: center;
+}
+.error_content span{
+  font-size: 55px;
+  font-weight: 600;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+
+
+
 
 /* 适应 */
 @media screen and (max-width: 768px) {
@@ -663,3 +724,6 @@
   padding-top: 20px !important;
 }
 }
+
+
+

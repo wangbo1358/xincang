@@ -6,8 +6,11 @@ import Routelist from './router';
 import Info from './detail';
 import Login from './List_replace';
 import Content1 from './Contetn_one';
+import Homelogin from "./Homelogin"
 
 import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import  FrontendAuth  from './FrontendAuth'
+import routerConfig from "./routerconfig"
 import { Button, DatePicker, Select, version, message, Pagination, Avatar, Input, Image, Card, Tabs, List, Space, Radio, Row, Col, Divider } from "antd";
 import "antd/dist/antd.css";
 import zhCN from 'antd/lib/locale/zh_CN';
@@ -38,9 +41,9 @@ class App_content extends React.Component {
   }
   componentWillMount = () => {
     let _this = this
-    window.window.uyun.env = 'prod';
-    window.window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
-      window.window.uyun.api.getDesigns({}, (err, result) => {
+    // window.window.uyun.env = 'prod';
+    window.uyun.api.authenticateMobileUser('17596576465', 'wangbo1358', function (err, result1) {
+      window.uyun.api.getDesigns({}, (err, result) => {
         console.log(result.data)
         console.log(result1);
         _this.setState({
@@ -48,13 +51,12 @@ class App_content extends React.Component {
           itemList1: result1
         })
       })
-      window.window.uyun.util.setToken(result1.token);
+      // window.window.uyun.util.setToken(result1.token);
+      // window.window.uyun.util.setApiToken(result1.token);
     });
   }
 
-  remove = (index) => {
-    this.state.itemList.splice(index, 1)
-  }
+  
   render() {
     return (
       <Router>
@@ -79,9 +81,11 @@ class App_content extends React.Component {
           </header>
           <div className="content">
             <Switch>
-              <Route path="/" exact component={Content1}></Route>
-              <Route path="/login" component={Login}></Route>
-              <Route path="/info" component={Info}></Route>
+              {/* <Route path="/" exact auth={true} component={Content1}></Route>
+              <Route path="/login" auth={true} component={Login}></Route>
+              <Route path="/info" auth={true} component={Info}></Route>
+              <Route path="/homelogin" component={Homelogin}></Route> */}
+              <FrontendAuth routerConfig={routerConfig}></FrontendAuth>
             </Switch>
           </div>
           <div className="app_bottom">

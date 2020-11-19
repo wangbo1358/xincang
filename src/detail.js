@@ -41,12 +41,96 @@ class Info extends React.Component {
         itemList1: [],
         titledata: ["所有", "现代", "田园", "欧式", "美式", "中式", "日式", "北欧", "地中海", "东南亚", "简欧", "工业风", "简美", "工装"],
         selectdata: "所有",
-        propdata: this.props.location.state
+        propdata2: this.props.location.state.a,
+        // proname:this.props.location.state.a.name,
+        // proid:this.props.location.state.b
+        propdata: [],
+        proname:"",
+        proid:"",
+        procar:this.props.location.state.a.category
       }
     }
-  
+    // componentWillReceiveProps=()=>{
+    //   this.setState({
+    //     propdata: this.props.location.state.a,
+    //     proname:this.props.location.state.a.name,
+    //     proid:this.props.location.state.b
+    //   })
+    // }
+    componentWillMount = () => {
+      // let _this = this
+      // window.window.uyun.api.getDesigns({}, (err, result) => {
+      //   console.log(result.data)
+      //   console.log(_this.state.proid)
+      //   console.log(result.data[0].name)
+      //   // console.log(result.data[_this.state.proid].name)
+      //   // console.log(result.data[_this.props.lisindex].name)
+      //     // if(result.data.length>0){
+      //     //     console.log(result.data.length);
+      //     //     document.getElementById("example").style.display="none"
+      //     // }
+      //     _this.setState({
+      //       itemList: result && result.data,
+      //       proname:result.data[0].name
+      //     })
+      //   })
+      let _this = this
+      if(_this.props.location.state.a.id!=null && _this.props.location.state.a.id!=undefined){
+        window.uyun.api.getDesign(_this.props.location.state.a.id, (err, result3) => {
+          console.log(result3)
+          if (result3!=null&&result3!=undefined) {
+            _this.setState({
+              propdata: result3,
+              proname:result3.name,
+              procar:result3.category,
+              proid:result3.id
+            })
+          }
+          // window.window.uyun.util.setToken(result3.token);
+          })
+          
+      }
+      
+    }
+  //保存
+    Preservation=()=>{
+      // console.log(this.state.propdata.id)
+      console.log(this.state.proid)
+      let _this = this
+      window.window.uyun.api.updateDesign(this.state.propdata.id, {name: this.state.proname},(err, result) =>{
+        // window.window.uyun.api.getDesign(this.state.propdata.id, (err, result3) => {
+        //   // console.log(result.data)
+        //   // console.log(_this.state.proid)
+        //   // console.log(result.data[0].name)
+        //   // console.log(result.data[_this.state.proid].name)
+        //   // console.log(result.data[_this.props.lisindex].name)
+        //     // if(result.data.length>0){
+        //     //     console.log(result.data.length);
+        //     //     document.getElementById("example").style.display="none"
+        //     // }
+        //     _this.setState({
+        //       // itemList: result && result.data,
+        //       // proname:result.data[0].name
+        //       propdata: result3,
+        //       proname:result3.name,
+        //       procar:result3.category
+        //     })
+        //   })
+      })
+      
+    }
+    inputChange=(e)=>{
+      this.setState({
+        proname:e.target.value
+      })
+    }
+    Selectchange=(value)=>{
+        // console.log(`selected ${value}`);
+        console.log(value);
+    }
     render() {
-      console.log(this.state.propdata)
+      // console.log(this.state.propdata)
+      console.log(this.state.procar)
       return (
         <div>
           <Link to='/'><Button type="primary">返回</Button></Link>
@@ -89,14 +173,14 @@ class Info extends React.Component {
               <span className="sjlname">
                 名称
           </span>
-              <Input placeholder="" value={this.state.propdata.name} />
+              <Input placeholder="" value={this.state.proname} onChange={this.inputChange} />
             </div>
   
             <div className="sjlist">
               <span className="sjlname">
                 类型
-          </span>
-              <Select defaultValue={this.state.propdata.category} style={{ width: "79%" }} allowClear>
+              </span>
+              <Select onChange={this.Selectchange} defaultValue={this.state.procar} style={{ width: "79%" }} allowClear>
                 <Option value="户型">户型</Option>
                 <Option value="样板间">样板间</Option>
                 <Option value="bim-design">设计</Option>
@@ -127,9 +211,9 @@ class Info extends React.Component {
               </div>
             </div>
           </Card>
-          <Button className="bottom_btn" type="primary" size={"large"}>
-            投稿
-      </Button>
+          <Button onClick={()=>{this.Preservation()}} className="bottom_btn" type="primary" size={"large"}>
+            保存
+          </Button>
         </div>
       )
     }
