@@ -1,0 +1,84 @@
+.erp_layout {
+    .erp_menu_bar {
+        position: fixed;
+        top     : 4.375rem;
+        left    : 10%;
+        width   : 20%;
+        padding : 1.25rem 0;
+    }
+
+    .erp_search_input {
+        position        : fixed;
+        top             : 4.375rem;
+        right           : 10%;
+        width           : 60%;
+        z-index         : 10;
+        padding         : 1.25rem 0;
+        background-color: #f4f4f4;
+        padding-left    : 1.25rem;
+    }
+
+    .erp_lists {
+        width       : 60%;
+        margin-right: 10%;
+        float       : right;
+        padding-left: 1.25rem;
+    }
+}
+
+.commandWrap {
+    width           : 100%;
+    border-radius   : 4px;
+    overflow        : hidden;
+    // height       : 555px;
+    // background   : #FFFFFF;
+    // border-radius: 4px;
+
+    .top_title {
+        height     : 30px;
+        font-size  : 18px;
+        font-weight: 400;
+        line-height: 26px;
+        color      : #333333;
+        border-bottom: 1px solid rgb(72, 155, 255);
+    }
+    .commandListWrap {
+        display        : flex;
+        justify-content: center;
+        flex-wrap      : wrap;
+        // .ant-card{
+            h2{
+                font-size: 24px;
+            }
+        // }
+    }
+
+    .cardWrap {
+        padding : 15px;
+        overflow: hidden;
+        position: relative;
+        ;
+
+        .learnMore {
+            position: absolute;
+            bottom  : 0;
+            left    : 0;
+            right   : 0;
+            ;
+            display        : flex;
+            justify-content: center;
+            height         : 30px;
+            line-height    : 30px;
+            cursor         : pointer;
+            font-size: 16px;
+            color          : #489BFF;
+            background     : linear-gradient(180deg, rgba(255, 255, 255, 0), #dddddd);
+        }
+
+        .learnMore:hover {
+            color: #489BF0;
+        }
+    }
+
+
+}

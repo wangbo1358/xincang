@@ -1,0 +1,6 @@
+REACT_APP_RUN_ENV=uyun-staging
+REACT_APP_UYUNJS_URL=https://static.zhuxingyun.com/uyun-staging/uyun/api/uyun.index.js
+REACT_APP_LOGINKEY=uzj-login-staging
+REACT_APP_WECHAT_APPID=wx992e70dba269f429
+REACT_APP_MAIN_BUSINESS=2efd98da52c64487aeb94281d93a8208
+REACT_APP_DEFAULT_BIM_URL=https://bim-staging.zhuxingyun.com/
